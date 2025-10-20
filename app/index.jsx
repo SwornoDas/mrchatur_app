@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   BackHandler,
-  
+  Platform,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { Ionicons } from "@expo/vector-icons";
@@ -59,17 +59,28 @@ const Browser = () => {
     );
   }
 
+  // Web platform doesn't support react-native-webview. Render an iframe as a fallback.
+  if (Platform.OS === "web") {
+    return (
+      <View style={styles.webContainer}>
+        <iframe
+          title="mrchatur"
+          src="https://www.mrchatur.in/"
+          style={styles.webIframe}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1 }}>
-     
       <WebView
         ref={webViewRef}
-        source={{ uri: "https://mrchatur.com/" }}
+        source={{ uri: "https://www.mrchatur.in/" }}
         style={{ flex: 1 }}
         onNavigationStateChange={(navState) => {
           setCanGoBack(navState.canGoBack);
         }}
-       
       />
     </View>
   );
@@ -88,6 +99,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#FF3B30",
+  },
+  webContainer: {
+    flex: 1,
+    height: "100vh",
+    width: "100%",
+    backgroundColor: "#fff",
+  },
+  webIframe: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    borderWidth: 0,
   },
 
 });
